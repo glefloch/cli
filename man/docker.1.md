@@ -25,7 +25,7 @@ To see the man page for a command run **man docker <command>**.
   Specifies the location of the Docker client configuration files. The default is '~/.docker'.
 
 **-D**, **--debug**=*true*|*false*
-  Enable debug mode. Default is false.
+  Enable debug mode. Default is *false*.
 
 **-H**, **--host**=[*unix:///var/run/docker.sock*]: tcp://[host]:[port][path] to bind or
 unix://[/path/to/socket] to use.
@@ -35,10 +35,10 @@ unix://[/path/to/socket] to use.
   `--tls` is off, or `2376` when `--tls` is on, or `--tlsverify` is specified.
 
 **-l**, **--log-level**="*debug*|*info*|*warn*|*error*|*fatal*"
-  Set the logging level. Default is `info`.
+  Set the logging level. Default is *info*.
 
 **--tls**=*true*|*false*
-  Use TLS; implied by --tlsverify. Default is false.
+  Use TLS; implied by --tlsverify. Default is *false*.
 
 **--tlscacert**=*~/.docker/ca.pem*
   Trust certs signed only by this CA.
@@ -54,7 +54,7 @@ unix://[/path/to/socket] to use.
   Default is false.
 
 **-v**, **--version**=*true*|*false*
-  Print version information and quit. Default is false.
+  Print version information and quit. Default is *false*.
 
 # COMMANDS
 

@@ -346,7 +346,7 @@ unix://[/path/to/socket] to use.
   flag is not set, the daemon outputs condensed, colorized logs if a terminal
   is detected, or full ("raw") output otherwise.
 
-**--registry-mirror**=*<scheme>://<host>*
+**--registry-mirror**=*scheme://host*
   Prepend a registry mirror to be used for image pulls. May be specified
   multiple times.
 
