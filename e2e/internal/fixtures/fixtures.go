@@ -14,6 +14,8 @@ const (
 	NotaryURL = "https://notary-server:4443"
 	//AlpineImage is an image in the test registry
 	AlpineImage = "registry:5000/alpine:3.6"
+	// NotaryImage is the image used for notary server
+	NotaryImage = "notary:server-0.5.0"
 	//AlpineSha is the sha of the alpine image
 	AlpineSha = "641b95ddb2ea9dc2af1a0113b6b348ebc20872ba615204fbe12148e98fd6f23d"
 	//BusyboxImage is an image in the test registry
@@ -95,16 +97,25 @@ func WithNotaryServer(notaryURL string) func(*icmd.Cmd) {
 	}
 }
 
+// WithWorkingDir sets the working directory for the command
+func WithWorkingDir(dir *fs.Dir) func(*icmd.Cmd) {
+	return func(cmd *icmd.Cmd) {
+		cmd.Dir = dir.Path()
+	}
+}
+
 // CreateMaskedTrustedRemoteImage creates a remote image that is signed with
 // content trust, then pushes a different untrusted image at the same tag.
 func CreateMaskedTrustedRemoteImage(t *testing.T, registryPrefix, repo, tag string) string {
 	t.Helper()
-	image := createTrustedRemoteImage(t, registryPrefix, repo, tag)
+	image := CreateTrustedRemoteImage(t, registryPrefix, repo, tag)
 	createNamedUnsignedImageFromBusyBox(t, image)
 	return image
 }
 
-func createTrustedRemoteImage(t *testing.T, registryPrefix, repo, tag string) string {
+// CreateTrustedRemoteImage creates a remote image that is signed with content
+// trust
+func CreateTrustedRemoteImage(t *testing.T, registryPrefix, repo, tag string) string {
 	t.Helper()
 	image := fmt.Sprintf("%s/%s:%s", registryPrefix, repo, tag)
 	icmd.RunCommand("docker", "image", "pull", AlpineImage).Assert(t, icmd.Success)

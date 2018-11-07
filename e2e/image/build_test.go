@@ -31,7 +31,7 @@ func TestBuildFromContextDirectoryWithTag(t *testing.T) {
 
 	result := icmd.RunCmd(
 		icmd.Command("docker", "build", "-t", "myimage", "."),
-		withWorkingDir(dir))
+		fixtures.WithWorkingDir(dir))
 	defer icmd.RunCommand("docker", "image", "rm", "myimage")
 
 	result.Assert(t, icmd.Expected{Err: icmd.None})
@@ -67,7 +67,7 @@ func TestTrustedBuild(t *testing.T) {
 
 	result := icmd.RunCmd(
 		icmd.Command("docker", "build", "-t", "myimage", "."),
-		withWorkingDir(buildDir),
+		fixtures.WithWorkingDir(buildDir),
 		fixtures.WithConfig(dir.Path()),
 		fixtures.WithTrust,
 		fixtures.WithNotary,
@@ -96,7 +96,7 @@ func TestTrustedBuildUntrustedImage(t *testing.T) {
 
 	result := icmd.RunCmd(
 		icmd.Command("docker", "build", "-t", "myimage", "."),
-		withWorkingDir(buildDir),
+		fixtures.WithWorkingDir(buildDir),
 		fixtures.WithConfig(dir.Path()),
 		fixtures.WithTrust,
 		fixtures.WithNotary,
@@ -126,7 +126,7 @@ func TestBuildIidFileSquash(t *testing.T) {
 	imageTag := "testbuildiidfilesquash"
 	result := icmd.RunCmd(
 		icmd.Command("docker", "build", "--iidfile", iidfile, "--squash", "-t", imageTag, "."),
-		withWorkingDir(buildDir),
+		fixtures.WithWorkingDir(buildDir),
 	)
 	result.Assert(t, icmd.Success)
 	id, err := ioutil.ReadFile(iidfile)
@@ -134,10 +134,4 @@ func TestBuildIidFileSquash(t *testing.T) {
 	result = icmd.RunCommand("docker", "image", "inspect", "-f", "{{.Id}}", imageTag)
 	result.Assert(t, icmd.Success)
 	assert.Check(t, is.Equal(string(id), strings.TrimSpace(result.Combined())))
-}
-
-func withWorkingDir(dir *fs.Dir) func(*icmd.Cmd) {
-	return func(cmd *icmd.Cmd) {
-		cmd.Dir = dir.Path()
-	}
 }
